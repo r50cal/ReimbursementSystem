@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Welcome!!</h1>
+    <h2 id="usernameHeading"></h2>
+
+
+
+
+  
+     
+
+        
+    <h3>View all of your reimbursements</h3>
+<button id="allTasksBtn">Get All Reimbursement</button>
+
+<table id="taskTable">
+    <thead><tr><th>	rId</th><th>amount</th><th>description</th><th>requesterId</th><th>Status</th></tr></thead>
+    
+
+</table>
+    
+</body>
+<script>
+document.getElementById("allTasksBtn").addEventListener("click",getAllTasks);
+
+// calls the functino when the page loads
+
+
+    //function that sends a username to a LoginServlet that attaches
+    // that username to a session object
+
+    
+    
+    async function getAllTasks(){
+
+let httpResponse = await fetch("http://localhost:8080/Projectone/api/reimbursements");
+let tasks = await httpResponse.json();
+let tableData = document.getElementById("taskTable");
+
+for(task of tasks){
+tableData.innerHTML = tableData.innerHTML + `<tr>
+<td> ${task.rId}</td> <td> ${task.amount}</td><td> ${task.description}</td> <td> ${task.requesterId}</td> <td> ${task.status}</td>
+<td>
+<button rId=${task.rId} amount="${task.amount}" description= ${task.description} requesterId= ${task.requesterId} status= ${task.status} onclick="approve(this);">Approve</button> </td>
+<td>
+<button rId=${task.rId} amount="${task.amount}" description= ${task.description} requesterId= ${task.requesterId} status= ${task.status} onclick="Deny(this);">Deny</button> </td></tr>`;
+}    
+}
+
+    async function approve(element){
+        
+        let task = {};
+        task.rId = element.getAttribute("rId");
+        task.status = "Approved";
+        console.log(task)
+        console.log(element)
+        let settings = {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify(task)
+        }
+
+        let httpResponse = await fetch("http://localhost:8080/Projectone/api/approvereimbursement", settings); 
+
+        console.log(httpResponse)
+
+    }
+
+</script>
+</html>

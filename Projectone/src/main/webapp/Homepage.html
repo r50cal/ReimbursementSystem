@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Welcome!!</h1>
+    <h2 id="usernameHeading"></h2>
+
+    <h3>Submit a new reimbursement </h3>
+  <input id="requesterIdInput" type="text" placeholder="Enter your Employee Id"> 
+    <input id="amountInput" type="text" placeholder="Enter amount">
+<input id="descInput" type="text" placeholder="Reimbursement detail">
+
+  <button id="addTaskBtn">Submit</button>
+  
+     
+
+        
+    <h3>View all of your reimbursements</h3>
+<button id="allTasksBtn">Get All Reimbursement</button>
+
+<table id="taskTable">
+    <thead><tr><th>	rId</th><th>amount</th><th>description</th><th>requesterId</th><th>Status</th></tr></thead>
+    
+
+</table>
+    
+</body>
+<script>
+document.getElementById("allTasksBtn").addEventListener("click",getAllTasks);
+document.getElementById("addTaskBtn").addEventListener("click",addTask);
+async function showUser(){
+
+
+    let httpResponse = await fetch("http://localhost:8080/Projectone/HomePageServlet");
+    let body = await httpResponse.text();
+
+    document.getElementById("usernameHeading").innerHTML = body;
+    console.log("finished show user")
+    showUser()
+}
+// calls the functino when the page loads
+
+
+    //function that sends a username to a LoginServlet that attaches
+    // that username to a session object
+
+    
+    async function addTask(){
+        
+        let task = {
+            rId:0,
+            status:"PENDING"
+        }
+        // appending the properties to the object after it is created
+       task.amount = Number.parseInt(document.getElementById("amountInput").value);
+        task.description = document.getElementById("descInput").value;
+         task.requesterId = Number.parseInt(document.getElementById("requesterIdInput").value);
+
+        let settings = {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify(task)
+        }
+
+        let httpResponse = await fetch("http://localhost:8080/Projectone/api/addreimbursement", settings); 
+
+        console.log(httpResponse)
+    }
+    
+    async function getAllTasks(){
+    	  let task = {
+    	            rId:0,
+    	            status:"PENDING"
+    	        }
+    	        // appending the properties to the object after it is created
+    	      task.amount = Number.parseInt(document.getElementById("amountInput").value); 
+    	        task.description = document.getElementById("descInput").value;
+    	         task.requesterId = Number.parseInt(document.getElementById("requesterIdInput").value);
+
+    	        let settings = {
+    	            method:'POST',
+    	            headers:{'Content-Type':'application/json'},
+    	            body: JSON.stringify(task)
+    	        }
+
+	
+let httpResponse = await fetch("http://localhost:8080/Projectone/api/emreimbursement");
+let tasks = await httpResponse.json();
+let tableData = document.getElementById("taskTable");
+
+for(task of tasks){
+    tableData.innerHTML = tableData.innerHTML + `<tr>
+    <td> ${task.rId}</td> <td> ${task.amount}</td><td> ${task.description}</td> <td> ${task.requesterId}</td> <td> ${task.status}</td></tr>`;
+}    
+}
+
+
+</script>
+</html>

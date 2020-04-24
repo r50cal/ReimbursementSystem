@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+    <h1>Login page</h1>
+
+<form action="ManagerLoginPage.html">
+    <input type="submit" value="ManagerLogin" />
+</form>
+  <form method="post" action="LoginServlet">
+        Username:<input type="text" name="user" /><br/>
+        Password:<input type="text" name="pass" /><br/>
+        <input type="submit" value="login" />
+        </form>
+
+    
+
+
+    
+</body>
+<script>
+
+    //function that sends a username to a LoginServlet that attaches
+    // that username to a session object
+    async function login(){
+        let username = document.getElementById("usernameInput").value;
+        let password = document.getElementById("passwordInput").value;
+ let httpResponse = await fetch("http://localhost:8080/Projectone/LoginServlet");
+       
+       //redirects me to another page
+       window.location.href = "http://localhost:8080/Projectone/Homepage.html";
+    }
+    
+   
+
+</script>
+</html>
