@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+<style>
+#background4{
+    background: no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+   background-image: url('06.jpg');
+   background-size: 80%;
+}
+
+#welcome{
+color: red;
+}
+
+#fonts{
+color: blue;
+}
+
+#taskTable{
+ border: 1px solid black;
+  padding: 15px;
+  text-align: left;
+  color: blue;
+   
+   border-color: blue;
+}
+#approveButton {
+border: 1px solid black;
+  padding: 15px;
+  text-align: left;
+background-color: #4CAF50;
+border-radius: 12px;
+font-family: Comic Sans MS;}
+#denyButton {
+border: 1px solid black;
+  padding: 15px;
+  text-align: left;
+background-color: #f44336;
+border-radius: 12px;
+font-family: Comic Sans MS;}
+</style>
+</head>
+<body id="background4">
+<div></div>
+<h1 id="welcome">Managers Homepage</h1>
+<div style="text-align:right"> <button style="font-family: Comic Sans MS; background-color: red; border-radius: 12px;" onclick="logout()">Logout</button></div>
+    <h2 id="usernameHeading"></h2>
+
+
+
+
+  
+     
+
+        
+    <h3 id="fonts">View Employees Reimbursements</h3>
+<button id="allTasksBtn" style="font-family: Comic Sans MS; background-color: #008CBA; border-radius: 12px;">Get All Reimbursements</button>
+<button id="close" style="font-family: Comic Sans MS; background-color: gray; border-radius: 12px;">Toggle Show/Hide Table</button>
+
+<table id="taskTable" style="border:none">
+    <thead id="taskTable"><tr id="taskTable"><th id="taskTable">Reimbursement ID</th><th id="taskTable">Amount</th><th id="taskTable">Description</th><th id="taskTable">Requester ID</th><th id="taskTable">Status</th></tr></thead>
+    
+
+</table>
+    
+</body>
+<script>
+document.getElementById("allTasksBtn").addEventListener("click",getAllTasks,false);
+document.getElementById("close").addEventListener("click",close);
+
+// calls the functino when the page loads
+
+
+    //function that sends a username to a LoginServlet that attaches
+    // that username to a session object
+
+    
+    
+    async function getAllTasks(){
+
+let httpResponse = await fetch("http://localhost:8080/Projectone/api/reimbursements");
+let tasks = await httpResponse.json();
+let tableData = document.getElementById("taskTable");
+
+for(task of tasks){
+tableData.innerHTML = tableData.innerHTML + `<tr>
+<td id="taskTable"> ${task.rId}</td> <td id="taskTable"> ${task.amount}</td><td id="taskTable"> ${task.description}</td> <td id="taskTable"> ${task.requesterId}</td> <td id="taskTable"> ${task.status}</td>
+<td>
+<button rId=${task.rId} amount="${task.amount}" description= ${task.description} requesterId= ${task.requesterId} status= ${task.status} onclick="approve(this);" id="approveButton">Approve</button> </td>
+<td>
+<button rId=${task.rId} amount="${task.amount}" description= ${task.description} requesterId= ${task.requesterId} status= ${task.status} onclick="deny(this);" id="denyButton" >Deny</button> </td></tr>`;
+} 
+document.getElementById("allTasksBtn").removeEventListener("click",getAllTasks,false);
+}
+
+    async function approve(element){
+        
+        let task = {};
+        task.rId = element.getAttribute("rId");
+        task.status = "Approved";
+        console.log(task)
+        console.log(element)
+        let settings = {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify(task)
+        }
+
+        let httpResponse = await fetch("http://localhost:8080/Projectone/api/approvereimbursement", settings); 
+
+        alert("Reimbursement Approved");
+        location.reload();
+
+    }
+    
+  async function deny(element){
+        
+        let task = {};
+        task.rId = element.getAttribute("rId");
+        task.status = "DENIED";
+        console.log(task)
+        console.log(element)
+        let settings = {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify(task)
+        }
+
+        let httpResponse = await fetch("http://localhost:8080/Projectone/api/denyreimbursement", settings); 
+
+        alert("Reimbursement Denied");
+        location.reload();
+
+    }
+  
+  async function logout(){
+let httpResponse = await fetch("http://localhost:8080/Projectone/ManagerLogoutServlet");
+     
+
+     //redirects me to another page
+     window.location.href = "http://localhost:8080/Projectone/ManagerLoginPage.html";
+     alert("You have been logged out");
+  }
+  
+  function close() {
+	  var x = document.getElementById("taskTable");
+	  if (x.style.display === "none") {
+	    x.style.display = "block";
+	  } else {
+	    x.style.display = "none";
+	  }
+	}
+  
+
+</script>
+</html>
