@@ -59,6 +59,7 @@ public class DispatcherServlet extends HttpServlet {
 		case "/Projectone/api/emreimbursement" : tcontroller.getAllReimbursementByRequesterId(request, response); break;
 		case "/Projectone/api/approvereimbursement" : tcontroller.approveReimbursement(request, response); break;
 		case "/Projectone/api/denyreimbursement" : tcontroller.denyReimbursement(request, response); break;
+		case "/Projectone/api/pendingreimbursements" : tcontroller.getAllPendingReimbursement(request, response); break;
 
 		
 		default : response.getWriter().append("your request uri did not match anything");break;

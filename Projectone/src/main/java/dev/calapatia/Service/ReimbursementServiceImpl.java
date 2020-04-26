@@ -41,11 +41,14 @@ public class ReimbursementServiceImpl implements ReimbursementService {
 		System.out.println(rdao.getAllReimbursement());
 		return rdao.getAllReimbursement();
 		
-		
-		
 	}
 
-	
+
+	@Override
+	public List<Reimbursement> getAllReimbursementByStatus(String status) {
+		System.out.println(rdao.getAllReimbursementByStatus("PENDING"));
+		return rdao.getAllReimbursementByStatus("PENDING");
+	}
 
 	@Override
 	public List<Reimbursement> getAllReimbursementByRequesterIdServ(int id) {

@@ -72,4 +72,15 @@ public class ReimbursementSerivcetests {
 
 
 }
+	
+	
+	@Test
+	public void merh() {
+		
+	rs.getAllReimbursementByStatus("PENDING");
+//		
+//		
+
+
+}
 }

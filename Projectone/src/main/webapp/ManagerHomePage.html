@@ -63,11 +63,11 @@ font-family: Comic Sans MS;}
         
     <h3 id="fonts">View Employees Reimbursements</h3>
 <button id="allTasksBtn" style="font-family: Comic Sans MS; background-color: #008CBA; border-radius: 12px;">Get All Reimbursements</button>
+<button id="allPendingBtn" style="font-family: Comic Sans MS; background-color: #008CBA; border-radius: 12px;">Get Pending Reimbursements</button>
 <button id="close" style="font-family: Comic Sans MS; background-color: gray; border-radius: 12px;">Toggle Show/Hide Table</button>
 
 <table id="taskTable" style="border:none">
     <thead id="taskTable"><tr id="taskTable"><th id="taskTable">Reimbursement ID</th><th id="taskTable">Amount</th><th id="taskTable">Description</th><th id="taskTable">Requester ID</th><th id="taskTable">Status</th></tr></thead>
-    
 
 </table>
     
@@ -75,7 +75,9 @@ font-family: Comic Sans MS;}
 <script>
 document.getElementById("allTasksBtn").addEventListener("click",getAllTasks,false);
 document.getElementById("close").addEventListener("click",close);
-
+document.getElementById("allPendingBtn").addEventListener("click",getPendingReimbursement,false);
+document.getElementById("allTasksBtn").addEventListener("dblclick",reload);
+document.getElementById("allPendingBtn").addEventListener("dblclick",reload);
 // calls the functino when the page loads
 
 
@@ -94,12 +96,27 @@ for(task of tasks){
 tableData.innerHTML = tableData.innerHTML + `<tr>
 <td id="taskTable"> ${task.rId}</td> <td id="taskTable"> ${task.amount}</td><td id="taskTable"> ${task.description}</td> <td id="taskTable"> ${task.requesterId}</td> <td id="taskTable"> ${task.status}</td>
 <td>
-<button rId=${task.rId} amount="${task.amount}" description= ${task.description} requesterId= ${task.requesterId} status= ${task.status} onclick="approve(this);" id="approveButton">Approve</button> </td>
-<td>
-<button rId=${task.rId} amount="${task.amount}" description= ${task.description} requesterId= ${task.requesterId} status= ${task.status} onclick="deny(this);" id="denyButton" >Deny</button> </td></tr>`;
+ </td></tr>`;
 } 
 document.getElementById("allTasksBtn").removeEventListener("click",getAllTasks,false);
 }
+
+    async function getPendingReimbursement(){
+
+    	let httpResponse = await fetch("http://localhost:8080/Projectone/api/pendingreimbursements");
+    	let tasks = await httpResponse.json();
+    	let tableData = document.getElementById("taskTable");
+
+    	for(task of tasks){
+    	tableData.innerHTML = tableData.innerHTML + `<tr>
+    	<td id="taskTable"> ${task.rId}</td> <td id="taskTable"> ${task.amount}</td><td id="taskTable"> ${task.description}</td> <td id="taskTable"> ${task.requesterId}</td> <td id="taskTable"> ${task.status}</td>
+    	<td><button rId=${task.rId} amount="${task.amount}" description= ${task.description} requesterId= ${task.requesterId} status= ${task.status} onclick="approve(this);" id="approveButton">Approve</button> </td>
+    	<td>
+    	<button rId=${task.rId} amount="${task.amount}" description= ${task.description} requesterId= ${task.requesterId} status= ${task.status} onclick="deny(this);" id="denyButton" >Deny</button>
+    	 </td></tr>`;
+    	} 
+    	document.getElementById("allPendingBtn").removeEventListener("click",getPendingReimbursement,false);
+    	}
 
     async function approve(element){
         
@@ -157,6 +174,11 @@ let httpResponse = await fetch("http://localhost:8080/Projectone/ManagerLogoutSe
 	  } else {
 	    x.style.display = "none";
 	  }
+	}
+  
+  function reload() {
+	  var x = document.getElementById("taskTable");
+	  location.reload();
 	}
   
 

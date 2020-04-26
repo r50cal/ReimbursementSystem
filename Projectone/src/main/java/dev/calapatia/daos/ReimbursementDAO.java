@@ -17,7 +17,7 @@ public interface ReimbursementDAO {
 	Reimbursement updateStatus(Reimbursement updateStatus);
 	List<Reimbursement> getAllReimbursementByRequesterId(int id);
 	List<Reimbursement> getAllReimbursement();
-	
+	List<Reimbursement> getAllReimbursementByStatus(String status);
 	
 	
 }
