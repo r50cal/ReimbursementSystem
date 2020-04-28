@@ -278,7 +278,35 @@ try(Connection conn = ConnectionUtil.createConnection()){
 
 
 	
+	@Override
+	public List<Reimbursement> getAllReimbursementByStatus(String status) {
+		try(Connection conn = ConnectionUtil.createConnection()){
+			String sql = "SELECT * FROM REIMBURSEMENT WHERE STATUS = ?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+		 ps.setString(1, status);
 
+			ResultSet rs = ps.executeQuery();
+			
+			List<Reimbursement> accounts = new ArrayList<Reimbursement>();
+			
+			while(rs.next()) {
+				
+				Reimbursement reimbursement = new Reimbursement();
+				reimbursement.setrId(rs.getInt("REIMBURSEMENT_ID"));
+				reimbursement.setAmount(rs.getInt("AMOUNT"));
+				reimbursement.setDescription(rs.getString("DESCRIPTION"));
+				reimbursement.setRequesterId(rs.getInt("REQUESTER_ID"));
+				reimbursement.setStatus(rs.getString("STATUS"));
+				accounts.add(reimbursement);
+			}
+			
+			return accounts;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 
 	

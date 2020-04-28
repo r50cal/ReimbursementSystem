@@ -34,6 +34,16 @@ LoginService lserv = new LoginServiceImpl();
 		
 	}
 	
+	public void getAllPendingReimbursement(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
+		Gson gson = new Gson();
+		List<Reimbursement> tasks = rserv.getAllReimbursementByStatus("PENDING");	
+		PrintWriter pw = response.getWriter();
+		String json = gson.toJson(tasks);
+		pw.append(json);
+		
+	}
+	
 	public void getAllReimbursementByRequesterId(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		Gson gson = new Gson();
 PrintWriter pw;

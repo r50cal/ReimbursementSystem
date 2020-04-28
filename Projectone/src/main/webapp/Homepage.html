@@ -21,6 +21,7 @@
   text-align: left;
   color: black;
    border-color: white;
+   font-family: Comic Sans MS;
 }
 
 .Logout{
@@ -58,7 +59,6 @@
         
     <h3 style="font-family: Comic Sans MS">View all of your reimbursements</h3>
 <button id="allTasksBtn" style="font-family: Comic Sans MS; background-color: #008CBA; border-radius: 12px;">Get All Reimbursement</button>
-<button id="close" style="font-family: Comic Sans MS;  background-color: black; border-radius: 12px; color:white">Toggle Show/Hide Table</button>
 
 <table id="taskTable" style="border:none">
     <thead id="taskTable" style="font-family: Comic Sans MS"><tr ><th id="taskTable" style="font-family: Comic Sans MS">	Reimbursement ID</th><th id="taskTable" style="font-family: Comic Sans MS">amount</th><th id="taskTable" style="font-family: Comic Sans MS">description</th><th id="taskTable" style="font-family: Comic Sans MS">Status</th></tr></thead>
@@ -70,7 +70,7 @@
 <script>
 document.getElementById("allTasksBtn").addEventListener("click",getAllTasks,false);
 document.getElementById("addTaskBtn").addEventListener("click",addTask);
-document.getElementById("close").addEventListener("click",close);
+document.getElementById("allTasksBtn").addEventListener("dblclick",reload);
 // calls the functino when the page loads
 
 
@@ -138,14 +138,10 @@ document.getElementById("allTasksBtn").removeEventListener("click",getAllTasks,f
     	     alert("You have been logged out");
     	  }
     
-    function close() {
-    	  var x = document.getElementById("taskTable");
-    	  if (x.style.display === "none") {
-    	    x.style.display = "block";
-    	  } else {
-    	    x.style.display = "none";
-    	  }
-    	}
+    function reload() {
+  	  var x = document.getElementById("taskTable");
+  	  location.reload();
+  	}
 
 </script>
 </html>

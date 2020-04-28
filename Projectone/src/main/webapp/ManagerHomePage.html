@@ -29,28 +29,30 @@ color: blue;
   padding: 15px;
   text-align: left;
   color: blue;
-   
+  font-family: Comic Sans MS;
    border-color: blue;
 }
 #approveButton {
 border: 1px solid black;
   padding: 15px;
   text-align: left;
-background-color: #4CAF50;
+background-color: #00ff00;
 border-radius: 12px;
-font-family: Comic Sans MS;}
+font-family: Comic Sans MS;
+ border-color: blue;}
 #denyButton {
 border: 1px solid black;
   padding: 15px;
   text-align: left;
-background-color: #f44336;
+background-color: #FF0000;
 border-radius: 12px;
-font-family: Comic Sans MS;}
+font-family: Comic Sans MS;
+ border-color: blue;}
 </style>
 </head>
 <body id="background4">
 <div></div>
-<h1 id="welcome">Managers Homepage</h1>
+<h1 id="welcome" style="font-family: Comic Sans MS;">Managers Homepage</h1>
 <div style="text-align:right"> <button style="font-family: Comic Sans MS; background-color: red; border-radius: 12px;" onclick="logout()">Logout</button></div>
     <h2 id="usernameHeading"></h2>
 
@@ -61,21 +63,20 @@ font-family: Comic Sans MS;}
      
 
         
-    <h3 id="fonts">View Employees Reimbursements</h3>
+    <h3 id="fonts" style="font-family: Comic Sans MS;">View Employees Reimbursements</h3>
 <button id="allTasksBtn" style="font-family: Comic Sans MS; background-color: #008CBA; border-radius: 12px;">Get All Reimbursements</button>
-<button id="close" style="font-family: Comic Sans MS; background-color: gray; border-radius: 12px;">Toggle Show/Hide Table</button>
-
+<button id="allPendingBtn" style="font-family: Comic Sans MS; background-color: yellow; border-radius: 12px;">Get Pending Reimbursements</button>
 <table id="taskTable" style="border:none">
-    <thead id="taskTable"><tr id="taskTable"><th id="taskTable">Reimbursement ID</th><th id="taskTable">Amount</th><th id="taskTable">Description</th><th id="taskTable">Requester ID</th><th id="taskTable">Status</th></tr></thead>
-    
+    <thead id="taskTable"><tr id="taskTable"><th id="taskTable">Reimbursement ID</th><th id="taskTable">Amount</th><th id="taskTable">Description</th><th id="taskTable">Requester ID</th><th id="taskTable">Status</th><th id="taskTable">Approve</th><th id="taskTable">Deny</th></tr></thead>
 
 </table>
     
 </body>
 <script>
 document.getElementById("allTasksBtn").addEventListener("click",getAllTasks,false);
-document.getElementById("close").addEventListener("click",close);
-
+document.getElementById("allPendingBtn").addEventListener("click",getPendingReimbursement,false);
+document.getElementById("allTasksBtn").addEventListener("dblclick",reload);
+document.getElementById("allPendingBtn").addEventListener("dblclick",reload);
 // calls the functino when the page loads
 
 
@@ -94,12 +95,27 @@ for(task of tasks){
 tableData.innerHTML = tableData.innerHTML + `<tr>
 <td id="taskTable"> ${task.rId}</td> <td id="taskTable"> ${task.amount}</td><td id="taskTable"> ${task.description}</td> <td id="taskTable"> ${task.requesterId}</td> <td id="taskTable"> ${task.status}</td>
 <td>
-<button rId=${task.rId} amount="${task.amount}" description= ${task.description} requesterId= ${task.requesterId} status= ${task.status} onclick="approve(this);" id="approveButton">Approve</button> </td>
-<td>
-<button rId=${task.rId} amount="${task.amount}" description= ${task.description} requesterId= ${task.requesterId} status= ${task.status} onclick="deny(this);" id="denyButton" >Deny</button> </td></tr>`;
+ </td></tr>`;
 } 
 document.getElementById("allTasksBtn").removeEventListener("click",getAllTasks,false);
 }
+
+    async function getPendingReimbursement(){
+
+    	let httpResponse = await fetch("http://localhost:8080/Projectone/api/pendingreimbursements");
+    	let tasks = await httpResponse.json();
+    	let tableData = document.getElementById("taskTable");
+
+    	for(task of tasks){
+    	tableData.innerHTML = tableData.innerHTML + `<tr>
+    	<td id="taskTable"> ${task.rId}</td> <td id="taskTable"> ${task.amount}</td><td id="taskTable"> ${task.description}</td> <td id="taskTable"> ${task.requesterId}</td> <td id="taskTable"> ${task.status}</td>
+    	<td id="taskTable"><button rId=${task.rId} amount="${task.amount}" description= ${task.description} requesterId= ${task.requesterId} status= ${task.status} onclick="approve(this);" id="approveButton">Approve</button> </td>
+    	<td id="taskTable">
+    	<button rId=${task.rId} amount="${task.amount}" description= ${task.description} requesterId= ${task.requesterId} status= ${task.status} onclick="deny(this);" id="denyButton" >Deny</button>
+    	 </td></tr>`;
+    	} 
+    	document.getElementById("allPendingBtn").removeEventListener("click",getPendingReimbursement,false);
+    	}
 
     async function approve(element){
         
@@ -157,6 +173,11 @@ let httpResponse = await fetch("http://localhost:8080/Projectone/ManagerLogoutSe
 	  } else {
 	    x.style.display = "none";
 	  }
+	}
+  
+  function reload() {
+	  var x = document.getElementById("taskTable");
+	  location.reload();
 	}
   
 

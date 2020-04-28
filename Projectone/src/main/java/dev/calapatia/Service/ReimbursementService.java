@@ -11,6 +11,6 @@ public interface ReimbursementService {
 	public Reimbursement denyReimbursement(Reimbursement reimbursement);
 	public List<Reimbursement> getAllReimbursement();
 	public List<Reimbursement> getAllReimbursementByRequesterIdServ(int id);
-
+	public List<Reimbursement> getAllReimbursementByStatus(String status);
 
 }
